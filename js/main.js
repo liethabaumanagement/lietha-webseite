@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const base = `images/team/${imgObj.basename}`;
         const formats = [
             { ext: 'avif', mime: 'image/avif' },
-            { ext: 'webp', mime: 'image/webp' },
             { ext: 'png', mime: 'image/png' }
         ];
         return `
@@ -234,7 +233,6 @@ document.addEventListener('DOMContentLoaded', function() {
         imageArray.forEach((img, index) => {
             const pictureElement = document.createElement('picture');
             const sourceAvif = document.createElement('source');
-            const sourceWebp = document.createElement('source');
             const sourcePng = document.createElement('source');
             const imgElement = document.createElement('img');
             
@@ -246,10 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
             sourceAvif.srcset = `${basePath}.avif`;
             sourceAvif.type = 'image/avif';
             
-            sourceWebp.srcset = `${basePath}.webp`;
-            sourceWebp.type = 'image/webp';
-            
-            // PNG as an additional fallback (useful for transparent images or where JPG isn't desired)
+            // PNG as a fallback (useful for transparent images or where JPG isn't desired)
             sourcePng.srcset = `${basePath}.png`;
             sourcePng.type = 'image/png';
             
@@ -260,7 +255,6 @@ document.addEventListener('DOMContentLoaded', function() {
             imgElement.loading = 'lazy';
             
             pictureElement.appendChild(sourceAvif);
-            pictureElement.appendChild(sourceWebp);
             pictureElement.appendChild(sourcePng);
             pictureElement.appendChild(imgElement);
             
