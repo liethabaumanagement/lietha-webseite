@@ -172,7 +172,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const sourcePng = document.createElement('source');
             const imgElement = document.createElement('img');
             
-            const basePath = `/images/references/${img.basename}`;
+            // Determine the correct folder based on the container
+            const folder = containerSelector === '.hero-slideshow' ? 'hero' : 'references';
+            const basePath = `/images/${folder}/${img.basename}`;
             
             // Preferred modern formats first
             sourceAvif.srcset = `${basePath}.avif`;
