@@ -70,6 +70,68 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
+    function renderTeamCards() {
+        const teamContainer = document.querySelector('#team-container');
+        if (!teamContainer) {
+            console.error('Team container not found');
+            return;
+        }
+        teamContainer.innerHTML = '';
+        teamImages.forEach((member, idx) => {
+            teamContainer.appendChild(createTeamCard(member, idx));
+        });
+
+        // Add the job card at the end
+        const jobCard = document.createElement('a');
+        jobCard.href = '#kontakt';
+        jobCard.className = 'team-card job-card fade-in-up';
+        jobCard.style.transitionDelay = `${0.1 + teamImages.length * 0.1}s`;
+        jobCard.innerHTML = `
+            <div class="team-static-info">
+                <h4>Du?</h4>
+                <p>Der/Die Neue</p>
+            </div>
+            <div class="team-image-container">
+                <div class="job-card-placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </div>
+                <div class="team-hover-info">
+                    <h4 class="font-bold">Werde Teil des Teams</h4>
+                    <p class="text-sm text-gray-200 mb-2">Wir suchen Verstärkung!</p>
+                    <span class="block text-sm underline">Jetzt bewerben</span>
+                </div>
+            </div>
+        `;
+        teamContainer.appendChild(jobCard);
+    }
+
+    function createTeamCard(member, idx) {
+        const card = document.createElement('div');
+        card.className = 'team-card fade-in-up';
+        card.style.transitionDelay = `${0.1 + idx * 0.1}s`;
+        card.innerHTML = `
+            <div class="team-static-info">
+                <h4>${member.name}</h4>
+                <p>${member.role}</p>
+            </div>
+            <div class="team-image-container">
+                <div class="team-image-wrapper">
+                    ${createPictureSources(member.serious, 'serious')}
+                    ${createPictureSources(member.smiling, 'smiling')}
+                    <div class="team-hover-info">
+                        <h4 class="font-bold">${member.fullName}</h4>
+                        <p class="text-sm text-gray-200 mb-2">${member.job}</p>
+                        <a href="mailto:${member.email}" class="block text-sm hover:text-white underline">${member.email}</a>
+                        <a href="tel:+41${member.phone.replace(/\D/g, '')}" class="block text-sm hover:text-white underline">${member.phone}</a>
+                    </div>
+                </div>
+            </div>
+        `;
+        return card;
+    }
+
     function initializeServiceModal(data) {
         const serviceModal = document.getElementById('service-modal');
         if (serviceModal) {
@@ -250,7 +312,19 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('js-loaded');
         initializeMobileMenu();
         initializeScrollAnimations();
-        renderTeamCards();
+        
+        // Initialize team cards with debug logging
+        console.log('Initializing team cards...');
+        const teamContainer = document.querySelector('#team .flex.flex-wrap.justify-center.items-start');
+        if (!teamContainer) {
+            console.error('Team container not found!');
+            console.log('Available team elements:', document.querySelectorAll('#team'));
+            console.log('Available flex-wrap elements:', document.querySelectorAll('.flex.flex-wrap'));
+        } else {
+            console.log('Team container found, rendering cards...');
+            renderTeamCards();
+        }
+        
         initializeServiceModal(serviceData);
         initializeReferences(referenceProjects);
         
