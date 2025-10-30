@@ -5,6 +5,7 @@
 import { referenceProjects } from './data/projects.js';
 import { heroImages } from './data/hero-images.js';
 import { referenceImages } from './data/reference-images.js';
+import { teamImages } from './data/team-images.js';
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -53,22 +54,46 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.fade-in-up').forEach(el => fadeInObserver.observe(el));
     }
 
-    function initializeTeamCards() {
-        const teamCards = document.querySelectorAll('.team-card');
-        teamCards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                if (e.target.tagName === 'A' || e.target.closest('a')) return;
-                e.stopPropagation();
-                const isAlreadyActive = card.classList.contains('is-active');
-                teamCards.forEach(c => c.classList.remove('is-active'));
-                if (!isAlreadyActive) {
-                    card.classList.add('is-active');
-                }
-            });
+    function renderTeamCards() {
+        const teamContainer = document.querySelector('#team .flex.flex-wrap');
+        if (!teamContainer) return;
+        teamContainer.innerHTML = '';
+        teamImages.forEach((member, idx) => {
+            const card = document.createElement('div');
+            card.className = `team-card fade-in-up`;
+            card.style.transitionDelay = `${0.1 + idx * 0.1}s`;
+            card.innerHTML = `
+                <div class="team-static-info">
+                    <h4>${member.name}</h4>
+                    <p>${member.role}</p>
+                </div>
+                <div class="team-image-container">
+                    <div class="team-image-wrapper">
+                        ${createPictureTag(member.serious)}
+                        ${createPictureTag(member.smiling)}
+                        <div class="team-hover-info">
+                            <h4 class="font-bold">${member.fullName}</h4>
+                            <p class="text-sm text-gray-200 mb-2">${member.job}</p>
+                            <a href="mailto:${member.email}" class="block text-sm hover:text-white underline">${member.email}</a>
+                            <a href="tel:+41${member.phone.replace(/\D/g, '')}" class="block text-sm hover:text-white underline">${member.phone}</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            teamContainer.appendChild(card);
         });
-        document.addEventListener('click', () => {
-            teamCards.forEach(card => card.classList.remove('is-active'));
-        });
+    }
+
+    function createPictureTag(imgObj) {
+        const base = `images/team/${imgObj.basename}`;
+        return `
+            <picture class="${imgObj.basename.includes('smiling') ? 'smiling' : 'serious'}">
+                <source srcset="${base}.avif" type="image/avif">
+                <source srcset="${base}.webp" type="image/webp">
+                <source srcset="${base}.png" type="image/png">
+                <img src="${base}.jpg" alt="${imgObj.alt}" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+            </picture>
+        `;
     }
 
     function initializeServiceModal(data) {
@@ -245,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('js-loaded');
     initializeMobileMenu();
     initializeScrollAnimations();
-    initializeTeamCards();
+    renderTeamCards();
     initializeServiceModal(serviceData);
     initializeReferences(referenceProjects);
     
