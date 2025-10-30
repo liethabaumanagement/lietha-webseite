@@ -55,41 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.fade-in-up').forEach(el => fadeInObserver.observe(el));
     }
 
-    function renderTeamCards() {
-        const teamContainer = document.querySelector('#team .flex.flex-wrap');
-        if (!teamContainer) return;
-        teamContainer.innerHTML = '';
-        teamImages.forEach((member, idx) => {
-            teamContainer.appendChild(createTeamCard(member, idx));
-        });
-    }
-
-    function createTeamCard(member, idx) {
-        const card = document.createElement('div');
-        card.className = 'team-card fade-in-up';
-        card.style.transitionDelay = `${0.1 + idx * 0.1}s`;
-        card.innerHTML = `
-            <div class="team-static-info">
-                <h4>${member.name}</h4>
-                <p>${member.role}</p>
-            </div>
-            <div class="team-image-container">
-                <div class="team-image-wrapper">
-                    ${createPictureSources(member.serious, 'serious')}
-                    ${createPictureSources(member.smiling, 'smiling')}
-                    <div class="team-hover-info">
-                        <h4 class="font-bold">${member.fullName}</h4>
-                        <p class="text-sm text-gray-200 mb-2">${member.job}</p>
-                        <a href="mailto:${member.email}" class="block text-sm hover:text-white underline">${member.email}</a>
-                        <a href="tel:+41${member.phone.replace(/\D/g, '')}" class="block text-sm hover:text-white underline">${member.phone}</a>
-                    </div>
-                </div>
-            </div>
-        `;
-        return card;
-    }
-
-    function createPictureSources(imgObj, type) {
+        function createPictureSources(imgObj, type) {
         const base = `images/team/${imgObj.basename}`;
         const formats = [
             { ext: 'avif', mime: 'image/avif' },
@@ -103,8 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </picture>
         `;
     }
-
-
 
     function initializeServiceModal(data) {
         const serviceModal = document.getElementById('service-modal');
@@ -190,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderProjectList();
     }
 
-        function setupSlideshow(containerSelector, imageArray, intervalDuration) {
+    function setupSlideshow(containerSelector, imageArray, intervalDuration) {
         if (!containerSelector || !imageArray) {
             console.error('setupSlideshow: Missing required parameters');
             return;
