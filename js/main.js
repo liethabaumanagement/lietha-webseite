@@ -8,6 +8,7 @@ import { referenceImages } from './data/reference-images.js';
 import { teamImages } from './data/team-images.js';
 
 document.addEventListener('DOMContentLoaded', function() {
+    'use strict';
 
     // --- DATEN für Service Modal (bleibt hier, da klein und statisch) ---
     const serviceData = {
@@ -54,54 +55,54 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.fade-in-up').forEach(el => fadeInObserver.observe(el));
     }
 
-function renderTeamCards() {
-    const teamContainer = document.querySelector('#team .flex.flex-wrap');
-    if (!teamContainer) return;
-    teamContainer.innerHTML = '';
-    teamImages.forEach((member, idx) => {
-        teamContainer.appendChild(createTeamCard(member, idx));
-    });
-}
+    function renderTeamCards() {
+        const teamContainer = document.querySelector('#team .flex.flex-wrap');
+        if (!teamContainer) return;
+        teamContainer.innerHTML = '';
+        teamImages.forEach((member, idx) => {
+            teamContainer.appendChild(createTeamCard(member, idx));
+        });
+    }
 
-function createTeamCard(member, idx) {
-    const card = document.createElement('div');
-    card.className = 'team-card fade-in-up';
-    card.style.transitionDelay = `${0.1 + idx * 0.1}s`;
-    card.innerHTML = `
-        <div class="team-static-info">
-            <h4>${member.name}</h4>
-            <p>${member.role}</p>
-        </div>
-        <div class="team-image-container">
-            <div class="team-image-wrapper">
-                ${createPictureSources(member.serious, 'serious')}
-                ${createPictureSources(member.smiling, 'smiling')}
-                <div class="team-hover-info">
-                    <h4 class="font-bold">${member.fullName}</h4>
-                    <p class="text-sm text-gray-200 mb-2">${member.job}</p>
-                    <a href="mailto:${member.email}" class="block text-sm hover:text-white underline">${member.email}</a>
-                    <a href="tel:+41${member.phone.replace(/\D/g, '')}" class="block text-sm hover:text-white underline">${member.phone}</a>
+    function createTeamCard(member, idx) {
+        const card = document.createElement('div');
+        card.className = 'team-card fade-in-up';
+        card.style.transitionDelay = `${0.1 + idx * 0.1}s`;
+        card.innerHTML = `
+            <div class="team-static-info">
+                <h4>${member.name}</h4>
+                <p>${member.role}</p>
+            </div>
+            <div class="team-image-container">
+                <div class="team-image-wrapper">
+                    ${createPictureSources(member.serious, 'serious')}
+                    ${createPictureSources(member.smiling, 'smiling')}
+                    <div class="team-hover-info">
+                        <h4 class="font-bold">${member.fullName}</h4>
+                        <p class="text-sm text-gray-200 mb-2">${member.job}</p>
+                        <a href="mailto:${member.email}" class="block text-sm hover:text-white underline">${member.email}</a>
+                        <a href="tel:+41${member.phone.replace(/\D/g, '')}" class="block text-sm hover:text-white underline">${member.phone}</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
-    return card;
-}
+        `;
+        return card;
+    }
 
-function createPictureSources(imgObj, type) {
-    const base = `images/team/${imgObj.basename}`;
-    const formats = [
-        { ext: 'avif', mime: 'image/avif' },
-        { ext: 'webp', mime: 'image/webp' },
-        { ext: 'png', mime: 'image/png' }
-    ];
-    return `
-        <picture class="${type}">
-            ${formats.map(f => `<source srcset="${base}.${f.ext}" type="${f.mime}">`).join('')}
-            <img src="${base}.jpg" alt="${imgObj.alt}" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
-        </picture>
-    `;
-}
+    function createPictureSources(imgObj, type) {
+        const base = `images/team/${imgObj.basename}`;
+        const formats = [
+            { ext: 'avif', mime: 'image/avif' },
+            { ext: 'webp', mime: 'image/webp' },
+            { ext: 'png', mime: 'image/png' }
+        ];
+        return `
+            <picture class="${type}">
+                ${formats.map(f => `<source srcset="${base}.${f.ext}" type="${f.mime}">`).join('')}
+                <img src="${base}.jpg" alt="${imgObj.alt}" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+            </picture>
+        `;
+    }
 
 
 
@@ -189,9 +190,14 @@ function createPictureSources(imgObj, type) {
         renderProjectList();
     }
 
-    function setupSlideshow(containerSelector, imageArray, intervalDuration) {
+        function setupSlideshow(containerSelector, imageArray, intervalDuration) {
+        if (!containerSelector || !imageArray) {
+            console.error('setupSlideshow: Missing required parameters');
+            return;
+        }
+
         const container = document.querySelector(containerSelector);
-        if (!container || !imageArray || imageArray.length === 0) {
+        if (!container || !Array.isArray(imageArray) || imageArray.length === 0) {
             console.log(`Slideshow setup skipped for ${containerSelector}: No container or images.`);
             return;
         }
@@ -276,14 +282,19 @@ function createPictureSources(imgObj, type) {
     }
 
     // --- SEITE INITIALISIEREN ---
-    document.body.classList.add('js-loaded');
-    initializeMobileMenu();
-    initializeScrollAnimations();
-    renderTeamCards();
-    initializeServiceModal(serviceData);
-    initializeReferences(referenceProjects);
-    
-    // Slideshows getrennt mit den importierten Daten initialisieren
-    setupSlideshow('.hero-slideshow', heroImages, 6000);
-    setupSlideshow('#reference-slideshow-container', referenceImages, 5000);
+    function init() {
+        document.body.classList.add('js-loaded');
+        initializeMobileMenu();
+        initializeScrollAnimations();
+        renderTeamCards();
+        initializeServiceModal(serviceData);
+        initializeReferences(referenceProjects);
+        
+        // Slideshows getrennt mit den importierten Daten initialisieren
+        setupSlideshow('.hero-slideshow', heroImages, 6000);
+        setupSlideshow('#reference-slideshow-container', referenceImages, 5000);
+    }
+
+    // Start initialization
+    init();
 });
