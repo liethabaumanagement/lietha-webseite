@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lietha Bau Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- 1. KRITISCHES CSS (Nur für den sofort sichtbaren Bereich) -->
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; color: #374151; background-color: #f9fafb; opacity: 0; transition: opacity 0.5s; }
+        body.js-loaded { opacity: 1; }
+        h1, h2, h3, h4, h5, h6 {
+	font-family: Montserrat, sans-serif;
+	font-weight: 700;
+	color: #0d2e57;
+}
+        .lbm-blue { color: #0d2e57; }
+        .bg-lbm-blue { background-color: #0d2e57; }
+        .btn { display: inline-block; padding: 14px 32px; border-radius: 8px; font-weight: 600; text-align: center; }
+        .hero-section { min-height: 80vh; position: relative; overflow: hidden; }
+        .hero-overlay { position: absolute; inset: 0; background-color: rgba(13, 46, 87, 0.65); z-index: 2; }
+        .hero-slideshow, .slide { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .slide { background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s ease-in-out; }
+        .slide.active { opacity: 1; }
+        .hero-content { position: relative; z-index: 4; }
+    </style>
+
+    <!-- 2. Asynchrones Laden des restlichen CSS -->
+    <link rel="stylesheet" href="css/style.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="css/style.css">
+    <style type="text/css">
+    body,td,th {
+	font-family: Inter, sans-serif;
+}
+    </style>
+    </noscript>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#">
+                <img src="images/logo.png" alt="Lietha Bau Management Logo" class="h-10 md:h-12" onerror="this.onerror=null;this.src='https://placehold.co/200x50/0d2e57/ffffff?text=Logo';">
+            </a>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="#anliegen" class="text-gray-600 hover:text-lbm-blue font-medium tracking-wide">Ihr Anliegen</a>
+                <a href="#team" class="text-gray-600 hover:text-lbm-blue font-medium tracking-wide">Team</a>
+                <a href="#referenzen" class="text-gray-600 hover:text-lbm-blue font-medium tracking-wide">Referenzen</a>
+                <a href="#kontakt" class="btn btn-primary shadow-md">Kontakt</a>
+            </nav>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+             <a href="#anliegen" class="block py-2 text-gray-600 hover:text-lbm-blue">Ihr Anliegen</a>
+             <a href="#team" class="block py-2 text-gray-600 hover:text-lbm-blue">Team</a>
+             <a href="#referenzen" class="block py-2 text-gray-600 hover:text-lbm-blue">Referenzen</a>
+             <a href="#kontakt" class="block mt-2 btn btn-primary w-full">Kontakt</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section flex items-center justify-center text-center text-white">
+            <div class="hero-slideshow"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content container mx-auto px-6 fade-in-up">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4 tracking-tighter">WIR BAUEN (AUF) DIE ZUKUNFT</h1>
+                <p class="text-xl md:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto">Ihr Projekt ist bei uns in den besten Händen. Von der ersten Idee bis zur finalen Übergabe – klar, sicher und persönlich begleitet.</p>
+                <a href="#anliegen" class="btn btn-primary text-lg shadow-lg">Unsere Kompetenzen entdecken</a>
+            </div>
+        </section>
+
+        <!-- Ihr Anliegen Section -->
+        <section id="anliegen" class="py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 fade-in-up">Was können wir für Sie tun?</h2>
+                <p class="max-w-3xl mx-auto text-gray-600 mb-16 fade-in-up" style="transition-delay: 0.1s;">Jedes Bauvorhaben ist einzigartig. Unsere Expertise auch. Wir bieten massgeschneiderte Lösungen für Ihre spezifischen Herausforderungen.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <!-- Card 1: Beratung & Planung -->
+                    <div class="service-card fade-in-up" style="transition-delay: 0.2s;">
+                        <div class="service-card-content">
+                            <div class="flex justify-center mb-4"><svg class="w-12 h-12 lbm-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg></div>
+                            <h3 class="text-2xl font-bold mb-3">Beratung &amp; Planung</h3>
+                            <p class="text-gray-600">Sie haben eine Vision? Wir schaffen die Fakten. Von Machbarkeitsstudien über Zustandsanalysen bis zur soliden Projekt- und Kostenplanung.</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn-details" data-service="planung">Mehr erfahren <span class="arrow">&rarr;</span></button>
+                        </div>
+                    </div>
+                    <!-- Card 2: Bauleitung & Realisierung -->
+                    <div class="service-card fade-in-up" style="transition-delay: 0.3s;">
+                        <div class="service-card-content">
+                            <div class="flex justify-center mb-4"><svg class="w-12 h-12 lbm-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2 1M4 7l2-1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg></div>
+                            <h3 class="text-2xl font-bold mb-3">Bauleitung &amp; Realisierung</h3>
+                            <p class="text-gray-600">Sie wollen Qualität, Termintreue und Budgetkontrolle? Wir leiten Ihr Projekt vor Ort, koordinieren die Gewerke und sichern den Erfolg.</p>
+                        </div>
+                        <div class="text-center">
+                           <button class="btn-details" data-service="bauleitung">Mehr erfahren <span class="arrow">&rarr;</span></button>
+                        </div>
+                    </div>
+                    <!-- Card 3: Projektentwicklung -->
+                    <div class="service-card fade-in-up" style="transition-delay: 0.4s;">
+                        <div class="service-card-content">
+                             <div class="flex justify-center mb-4">
+                                  <svg class="w-12 h-12 lbm-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                </div>
+                            <h3 class="text-2xl font-bold mb-3">Projektentwicklung</h3>
+                            <p class="text-gray-600">Sie suchen das Potenzial in Grundstücken und Immobilien? Wir entwickeln innovative Konzepte und tragfähige Strategien.</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn-details" data-service="entwicklung">Mehr erfahren <span class="arrow">&rarr;</span></button>
+                        </div>
+                    </div>
+                    <!-- Card 4: Spezialleistungen -->
+                    <div class="service-card fade-in-up" style="transition-delay: 0.5s;">
+                        <div class="service-card-content">
+                            <div class="flex justify-center mb-4"><svg class="w-12 h-12 lbm-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg></div>
+                            <h3 class="text-2xl font-bold mb-3">Spezialleistungen</h3>
+                            <p class="text-gray-600">Sie haben eine aussergewöhnliche Aufgabe? Von Bauökonomie über Expertisen bis zu komplexen Immobilienstrategien – wir lieben die Herausforderung.</p>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn-details" data-service="spezial">Mehr erfahren <span class="arrow">&rarr;</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team" class="py-20 md:py-32 bg-white overflow-hidden">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-24 fade-in-up">
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Die Menschen hinter dem Management.</h2>
+                    <p class="text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto">Unser grösstes Kapital ist unser Team. Eine Mischung aus strategischem Weitblick, kreativer Energie und praktischer Erfahrung. Wir sind jung, dynamisch und persönlich für Sie da – von Chur für ganz Graubünden.</p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center items-start gap-x-8 gap-y-16 max-w-6xl mx-auto">
+                    <!-- Mitarbeiterkarte 1 -->
+                    <div class="team-card fade-in-up" style="transition-delay: 0.1s;">
+                        <div class="team-static-info">
+                            <h4>Ronny</h4>
+                            <p>Der Chef</p>
+                        </div>
+                        <div class="team-image-container">
+                            <div class="team-image-wrapper">
+                                <img src="images/ronny-serious.jpg" alt="Ronny Lietha" class="serious" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <img src="images/ronny-smiling.jpg" alt="Ronny Lietha lachend" class="smiling" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <div class="team-hover-info">
+                                    <h4 class="font-bold">Ronny Lietha</h4>
+                                    <p class="text-sm text-gray-200 mb-2">Geschäftsführer, Bauökonom</p>
+                                    <a href="mailto:rl@l-b-m.ch" class="block text-sm hover:text-white underline">rl@l-b-m.ch</a>
+                                    <a href="tel:+41812524646" class="block text-sm hover:text-white underline">081 252 46 46</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mitarbeiterkarte 2 -->
+                    <div class="team-card fade-in-up" style="transition-delay: 0.2s;">
+                        <div class="team-static-info">
+                            <h4>Manuela</h4>
+                            <p>Die Organisatorin</p>
+                        </div>
+                        <div class="team-image-container">
+                            <div class="team-image-wrapper">
+                                <img src="images/manuela-serious.jpg" alt="Manuela Lietha" class="serious" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <img src="images/manuela-smiling.jpg" alt="Manuela Lietha lachend" class="smiling" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <div class="team-hover-info">
+                                    <h4 class="font-bold">Manuela Lietha</h4>
+                                    <p class="text-sm text-gray-200 mb-2">Administration, HR</p>
+                                    <a href="mailto:ml@l-b-m.ch" class="block text-sm hover:text-white underline">ml@l-b-m.ch</a>
+                                    <a href="tel:+41812524646" class="block text-sm hover:text-white underline">081 252 46 46</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mitarbeiterkarte 3 -->
+                    <div class="team-card fade-in-up" style="transition-delay: 0.3s;">
+                        <div class="team-static-info">
+                            <h4>Thomas</h4>
+                            <p>Der Entwickler</p>
+                        </div>
+                        <div class="team-image-container">
+                            <div class="team-image-wrapper">
+                                <img src="images/thomas-serious.jpg" alt="Thomas Clavadetscher" class="serious" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <img src="images/thomas-smiling.jpg" alt="Thomas Clavadetscher lachend" class="smiling" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <div class="team-hover-info">
+                                    <h4 class="font-bold">Thomas Clavadetscher</h4>
+                                    <p class="text-sm text-gray-200 mb-2">Projektentwickler</p>
+                                    <a href="mailto:tc@l-b-m.ch" class="block text-sm hover:text-white underline">tc@l-b-m.ch</a>
+                                    <a href="tel:+41812524646" class="block text-sm hover:text-white underline">081 252 46 46</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mitarbeiterkarte 4 -->
+                    <div class="team-card fade-in-up" style="transition-delay: 0.4s;">
+                        <div class="team-static-info">
+                            <h4>Roman</h4>
+                            <p>Der Praktiker</p>
+                        </div>
+                        <div class="team-image-container">
+                            <div class="team-image-wrapper">
+                                <img src="images/roman-serious.jpg" alt="Roman Wolf" class="serious" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <img src="images/roman-smiling.jpg" alt="Roman Wolf lachend" class="smiling" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <div class="team-hover-info">
+                                    <h4 class="font-bold">Roman Wolf</h4>
+                                    <p class="text-sm text-gray-200 mb-2">Junior Bauleiter</p>
+                                    <a href="mailto:rw@l-b-m.ch" class="block text-sm hover:text-white underline">rw@l-b-m.ch</a>
+                                    <a href="tel:+41812524646" class="block text-sm hover:text-white underline">081 252 46 46</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mitarbeiterkarte 5 -->
+                    <div class="team-card fade-in-up" style="transition-delay: 0.5s;">
+                        <div class="team-static-info">
+                            <h4>Mike</h4>
+                            <p>Der Anpacker</p>
+                        </div>
+                        <div class="team-image-container">
+                            <div class="team-image-wrapper">
+                                <img src="images/mike-serious.jpg" alt="Mike Jäger" class="serious" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <img src="images/mike-smiling.jpg" alt="Mike Jäger lachend" class="smiling" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                                <div class="team-hover-info">
+                                    <h4 class="font-bold">Mike Jäger</h4>
+                                    <p class="text-sm text-gray-200 mb-2">Bauleiter</p>
+                                    <a href="mailto:mj@l-b-m.ch" class="block text-sm hover:text-white underline">mj@l-b-m.ch</a>
+                                    <a href="tel:+41812524646" class="block text-sm hover:text-white underline">081 252 46 46</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Job-Karte -->
+                    <a href="#kontakt" class="team-card job-card fade-in-up" style="transition-delay: 0.6s;">
+                        <div class="team-static-info">
+                            <h4>Du?</h4>
+                            <p>Der/Die Neue</p>
+                        </div>
+                        <div class="team-image-container">
+                            <div class="job-card-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </div>
+                             <div class="team-hover-info">
+                                 <h4 class="font-bold">Werde Teil des Teams</h4>
+                                 <p class="text-sm text-gray-200 mb-2">Wir suchen Verstärkung!</p>
+                                 <span class="block text-sm underline">Jetzt bewerben</span>
+                             </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- REFERENZEN SEKTION -->
+        <section id="referenzen" class="py-20 md:py-32 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 fade-in-up">
+                    <h2 class="text-3xl md:text-4xl font-bold">Unsere Referenzen.</h2>
+                    <p class="max-w-3xl mx-auto text-gray-600 mt-4">Eine Auswahl unserer erfolgreich abgeschlossenen Projekte. Jedes einzelne ein Beweis für unser Engagement für Qualität, Termintreue und Kostensicherheit.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto fade-in-up">
+                    <div class="bg-lbm-blue rounded-xl shadow-lg p-6 md:p-8 flex flex-col h-[360px] lg:h-[420px]">
+                        <div id="project-list" class="flex-grow">
+                            <!-- Projekt-Liste wird via JavaScript eingefügt -->
+                        </div>
+                    </div>
+                    <div class="relative rounded-xl shadow-lg overflow-hidden h-[360px] lg:h-[420px]">
+                         <div id="reference-slideshow-container" class="absolute inset-0 z-0">
+                             <!-- Slideshow wird via JavaScript eingefügt -->
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kontakt Section -->
+        <section id="kontakt" class="py-20 md:py-32 bg-lbm-blue text-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 fade-in-up">Lassen Sie uns reden.</h2>
+                <p class="max-w-2xl mx-auto text-gray-200 mb-10 text-lg fade-in-up" style="transition-delay: 0.1s;">Haben Sie ein Anliegen, eine erste Idee oder eine komplexe Herausforderung? Wir freuen uns darauf, von Ihnen zu hören.</p>
+                <div class="fade-in-up" style="transition-delay: 0.2s;">
+                    <a href="mailto:info@l-b-m.ch" class="btn bg-white font-bold text-lg hover:bg-gray-200" style="color: #0d2e57;"><strong>info@l-b-m.ch</strong></a>
+                  <p class="mt-6 text-gray-300">Oder rufen Sie uns an: <a href="tel:+41812524646"><strong>081 252 46 46</strong></a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white relative pt-24 pb-8 overflow-hidden">
+        <div class="relative z-10 container mx-auto px-6 text-center text-gray-400">
+            <p>&copy; 2025 lbm Lietha Bau Management GmbH</p>
+            <p class="text-sm mt-2"><a href="#" class="hover:text-white">Impressum</a> | <a href="#" class="hover:text-white">Datenschutz</a></p>
+        </div>
+    </footer>
+
+    <!-- Service Modal Structure -->
+    <div id="service-modal" class="modal-container">
+        <div id="modal-overlay" class="modal-overlay fixed inset-0"></div>
+        <div class="modal-content">
+            <button id="modal-close-btn" class="modal-close">&times;</button>
+            <div id="modal-icon-container" class="flex justify-center mb-4"></div>
+            <h3 id="modal-title" class="text-3xl font-bold mb-4 text-center"></h3>
+            <div id="modal-body" class="text-gray-600"></div>
+        </div>
+    </div>
+
+    <!-- WICHTIG: type="module" ermöglicht das Laden der Daten-Dateien -->
+    <script src="js/main.js" type="module" defer></script>
+
+</body>
+</html>
+
