@@ -169,16 +169,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const pictureElement = document.createElement('picture');
             const sourceAvif = document.createElement('source');
             const sourceWebp = document.createElement('source');
+            const sourcePng = document.createElement('source');
             const imgElement = document.createElement('img');
             
             const basePath = `/images/references/${img.basename}`;
             
+            // Preferred modern formats first
             sourceAvif.srcset = `${basePath}.avif`;
             sourceAvif.type = 'image/avif';
             
             sourceWebp.srcset = `${basePath}.webp`;
             sourceWebp.type = 'image/webp';
             
+            // PNG as an additional fallback (useful for transparent images or where JPG isn't desired)
+            sourcePng.srcset = `${basePath}.png`;
+            sourcePng.type = 'image/png';
+            
+            // Final <img> fallback (JPEG)
             imgElement.src = `${basePath}.jpg`;
             imgElement.alt = img.alt;
             imgElement.className = 'slide-image';
@@ -186,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             pictureElement.appendChild(sourceAvif);
             pictureElement.appendChild(sourceWebp);
+            pictureElement.appendChild(sourcePng);
             pictureElement.appendChild(imgElement);
             
             const slide = document.createElement('div');
