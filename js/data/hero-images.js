@@ -10,14 +10,14 @@
  * @type {Array<{ basename: string, alt: string }>}
  */
 export const heroImages = [
-    { basename: '20190318-IMG_7631', alt: 'Baustelle im Rohbau, Betonwände und Decken.' },
-    { basename: '20190318-IMG_7636', alt: 'Blick in einen leeren Raum einer Baustelle.' },
-    { basename: '20190318-IMG_7642', alt: 'Betonpfeiler und Deckenkonstruktion auf einer Baustelle.' },
-    { basename: '20190326-IMG_7712', alt: 'Fortschritt einer Kernsanierung mit freigelegten Wänden.' },
-    { basename: '20190328-IMG_7717', alt: 'Einbau von Dämmmaterial in eine Deckenkonstruktion.' },
-    { basename: '20190328-IMG_7720', alt: 'Detailaufnahme einer Wand im Rohbau.' },
-    { basename: '20190410-IMG_7835', alt: 'Moderne Küche im Bau mit installierten Geräten.' },
-    { basename: '20190410-IMG_7836', alt: 'Offener Wohnbereich während des Innenausbaus.' },
-    { basename: '20190507-IMG_8669', alt: 'Bau eines modernen Holzhauses mit grossen Fenstern.' },
-    { basename: '20190605-IMG_9351', alt: 'Aussenansicht eines fast fertigen Bauprojekts.' }
+    { basename: '20201022-DSC_1074', alt: 'Detailaufnahme einer Baustelle' },
+    { basename: '20220502-IMG_2207', alt: 'Moderne Baustruktur im Entstehen' },
+    { basename: '20220905-IMG_5100', alt: 'Fortschritt eines Bauprojekts' },
+    { basename: '20230516-IMG_9030', alt: 'Aktuelle Bauarbeiten' },
+    { basename: '20230810-IMG_0137', alt: 'Moderne Architektur im Bau' },
+    { basename: 'baugrube-sanitaergebaeude-camping-st-cassian', alt: 'Baugrube für Sanitärgebäude, Camping St. Cassian' },
+    { basename: 'einfahrt-tiefgarage-mfh-chur', alt: 'Tiefgarageneinfahrt eines Mehrfamilienhauses in Chur' },
+    { basename: 'gerüstung-mfh-chur-wenig-platz', alt: 'Gerüstung an einem Mehrfamilienhaus in Chur' },
+    { basename: 'innere-abbrucharbeiten-sanierung', alt: 'Innere Abbrucharbeiten während einer Sanierung' },
+    { basename: 'strangsanierung-steigzonen-chur', alt: 'Strangsanierung der Steigzonen in Chur' }
 ];
