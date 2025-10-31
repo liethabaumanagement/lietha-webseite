@@ -1,14 +1,32 @@
 // js/main.js
 // Importiert alle Daten-Module und steuert die Interaktivität der Seite.
 
-// Daten aus separaten Modulen importieren
-import { referenceProjects } from './data/projects.js';
-import { heroImages } from './data/hero-images.js';
-import { referenceImages } from './data/reference-images.js';
-import { teamImages } from './data/team-images.js';
+// Asynchronously import all data modules
+async function loadModules() {
+    try {
+        const [
+            { referenceProjects },
+            { heroImages },
+            { referenceImages },
+            { teamImages }
+        ] = await Promise.all([
+            import('./data/projects.js'),
+            import('./data/hero-images.js'),
+            import('./data/reference-images.js'),
+            import('./data/team-images.js')
+        ]);
+        return { referenceProjects, heroImages, referenceImages, teamImages };
+    } catch (error) {
+        console.error('Error loading modules:', error);
+        throw error;
+    }
+}
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     'use strict';
+    
+    try {
+        const { referenceProjects, heroImages, referenceImages, teamImages } = await loadModules();
 
     // --- DATEN für Service Modal (bleibt hier, da klein und statisch) ---
     const serviceData = {
