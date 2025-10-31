@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
         function createPictureSources(imgObj, type) {
-        const base = `images/team/${imgObj.basename}`;
+        const base = `./images/team/${imgObj.basename}`;
         const formats = [
             { ext: 'avif', mime: 'image/avif' },
             { ext: 'png', mime: 'image/png' }
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Determine the correct folder based on the container
             const folder = containerSelector === '.hero-slideshow' ? 'hero' : 'references';
-            const basePath = `/images/${folder}/${img.basename}`;
+            const basePath = `./images/${folder}/${img.basename}`;
             
             // Preferred modern formats first
             sourceAvif.srcset = `${basePath}.avif`;
@@ -307,17 +307,8 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeMobileMenu();
         initializeScrollAnimations();
         
-        // Initialize team cards with debug logging
-        console.log('Initializing team cards...');
-        const teamContainer = document.querySelector('#team .flex.flex-wrap.justify-center.items-start');
-        if (!teamContainer) {
-            console.error('Team container not found!');
-            console.log('Available team elements:', document.querySelectorAll('#team'));
-            console.log('Available flex-wrap elements:', document.querySelectorAll('.flex.flex-wrap'));
-        } else {
-            console.log('Team container found, rendering cards...');
-            renderTeamCards();
-        }
+        // Initialize team cards
+        renderTeamCards();
         
         initializeServiceModal(serviceData);
         initializeReferences(referenceProjects);
