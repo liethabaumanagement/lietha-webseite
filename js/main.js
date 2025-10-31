@@ -56,28 +56,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
         function createPictureSources(imgObj, type) {
-        const base = `./images/team/${imgObj.basename}`;
+        const base = `/images/team/${imgObj.basename}`;
         const formats = [
-            { ext: 'avif', mime: 'image/avif' },
-            { ext: 'png', mime: 'image/png' }
+            { ext: 'avif', mime: 'image/avif' }
         ];
         return `
             <picture class="${type}">
                 ${formats.map(f => `<source srcset="${base}.${f.ext}" type="${f.mime}">`).join('')}
-                <img src="${base}.jpg" alt="${imgObj.alt}" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                <img src="${base}.avif" alt="${imgObj.alt}" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
             </picture>
         `;
     }
 
     function renderTeamCards() {
+        console.log('Starting to render team cards...');
         const teamContainer = document.querySelector('#team-container');
         if (!teamContainer) {
             console.error('Team container not found');
+            console.log('Available team containers:', document.querySelectorAll('[id*="team"]'));
             return;
         }
+        console.log('Team container found:', teamContainer);
+        console.log('Number of team members:', teamImages.length);
         teamContainer.innerHTML = '';
         teamImages.forEach((member, idx) => {
-            teamContainer.appendChild(createTeamCard(member, idx));
+            console.log(`Creating card for team member: ${member.name}`);
+            const card = createTeamCard(member, idx);
+            teamContainer.appendChild(card);
         });
 
         // Add the job card at the end
@@ -233,29 +238,23 @@ document.addEventListener('DOMContentLoaded', function() {
         imageArray.forEach((img, index) => {
             const pictureElement = document.createElement('picture');
             const sourceAvif = document.createElement('source');
-            const sourcePng = document.createElement('source');
             const imgElement = document.createElement('img');
             
             // Determine the correct folder based on the container
             const folder = containerSelector === '.hero-slideshow' ? 'hero' : 'references';
             const basePath = `./images/${folder}/${img.basename}`;
             
-            // Preferred modern formats first
+            // AVIF format
             sourceAvif.srcset = `${basePath}.avif`;
             sourceAvif.type = 'image/avif';
             
-            // PNG as a fallback (useful for transparent images or where JPG isn't desired)
-            sourcePng.srcset = `${basePath}.png`;
-            sourcePng.type = 'image/png';
-            
-            // Final <img> fallback (JPEG)
-            imgElement.src = `${basePath}.jpg`;
+            // Final <img> fallback
+            imgElement.src = `${basePath}.avif`;
             imgElement.alt = img.alt;
             imgElement.className = 'slide-image';
             imgElement.loading = 'lazy';
             
             pictureElement.appendChild(sourceAvif);
-            pictureElement.appendChild(sourcePng);
             pictureElement.appendChild(imgElement);
             
             const slide = document.createElement('div');
@@ -303,11 +302,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- SEITE INITIALISIEREN ---
     function init() {
+        console.log('Initializing page...');
         document.body.classList.add('js-loaded');
         initializeMobileMenu();
         initializeScrollAnimations();
         
         // Initialize team cards
+        console.log('About to render team cards...');
         renderTeamCards();
         
         initializeServiceModal(serviceData);
