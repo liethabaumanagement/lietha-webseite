@@ -73,16 +73,35 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.querySelectorAll('.fade-in-up').forEach(el => fadeInObserver.observe(el));
     }
 
-        function createPictureSources(imgObj, type) {
+    /**
+     * Erstellt robuste Picture-Quellen für Team-Bilder.
+     * @param {object} imgObj - Das Bildobjekt (z.B. member.serious)
+     * @param {string} type - Der Typ (z.B. 'serious' oder 'smiling')
+     * @returns {string} - Das HTML für das <picture>-Element.
+     */
+    function createPictureSources(imgObj, type) {
+        // FALLBACK: Wenn imgObj oder basename fehlt, einen Placeholder rendern.
+        if (!imgObj || !imgObj.basename) {
+            console.warn(`Missing image object or basename for type: ${type}`);
+            return `<img src="https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt" alt="Bild fehlt" class="${type}">`;
+        }
+        
         const base = `./images/team/${imgObj.basename}`;
         const formats = [
             { ext: 'avif', mime: 'image/avif' }
+            // Zukünftige Formate (z.B. webp) könnten hier hinzugefügt werden
+            // { ext: 'webp', mime: 'image/webp' }
         ];
+        
+        // Fallback auf .avif (da es das einzige optimierte Format ist)
+        const fallbackSrc = `${base}.avif`;
+        const altText = imgObj.alt || 'Team-Mitglied'; // Fallback für Alt-Text
+
         console.log(`Creating picture sources for ${imgObj.basename}, type: ${type}`);
         return `
             <picture class="${type}">
                 ${formats.map(f => `<source srcset="${base}.${f.ext}" type="${f.mime}">`).join('')}
-                <img src="${base}.avif" alt="${imgObj.alt}" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
+                <img src="${fallbackSrc}" alt="${altText}" onerror="this.onerror=null;this.src='https://placehold.co/280x350/e0e0e0/666666?text=Bild+fehlt';">
             </picture>
         `;
     }
@@ -95,6 +114,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log('Available team containers:', document.querySelectorAll('[id*="team"]'));
             return;
         }
+
+        // Überprüfen, ob teamImages vorhanden und ein Array ist
+        if (!teamImages || !Array.isArray(teamImages)) {
+            console.error('Team images data is missing or not an array.');
+            teamContainer.innerHTML = '<p>Team-Daten konnten nicht geladen werden.</p>'; // Feedback für den Benutzer
+            return;
+        }
+
         console.log('Team container found:', teamContainer);
         console.log('Number of team members:', teamImages.length);
         teamContainer.innerHTML = '';
@@ -137,20 +164,29 @@ document.addEventListener('DOMContentLoaded', async function() {
         card.style.transitionDelay = `${0.1 + idx * 0.1}s`;
 
         try {
+            // Sicherstellen, dass member-Daten vorhanden sind, bevor auf sie zugegriffen wird
+            const memberName = member.name || 'N/A';
+            const memberRole = member.role || 'Team-Mitglied';
+            const memberFullName = member.fullName || memberName;
+            const memberJob = member.job || memberRole;
+            const memberEmail = member.email || 'info@l-b-m.ch';
+            const memberPhone = member.phone || '081 252 46 46';
+            const memberPhoneLink = memberPhone.replace(/\D/g, '');
+
             card.innerHTML = `
                 <div class="team-static-info">
-                    <h4>${member.name}</h4>
-                    <p>${member.role}</p>
+                    <h4>${memberName}</h4>
+                    <p>${memberRole}</p>
                 </div>
                 <div class="team-image-container">
                     <div class="team-image-wrapper">
                         ${createPictureSources(member.serious, 'serious')}
                         ${createPictureSources(member.smiling, 'smiling')}
                         <div class="team-hover-info">
-                            <h4 class="font-bold">${member.fullName}</h4>
-                            <p class="text-sm text-gray-200 mb-2">${member.job}</p>
-                            <a href="mailto:${member.email}" class="block text-sm hover:text-white underline">${member.email}</a>
-                            <a href="tel:+41${member.phone.replace(/\D/g, '')}" class="block text-sm hover:text-white underline">${member.phone}</a>
+                            <h4 class="font-bold">${memberFullName}</h4>
+                            <p class="text-sm text-gray-200 mb-2">${memberJob}</p>
+                            <a href="mailto:${memberEmail}" class="block text-sm hover:text-white underline">${memberEmail}</a>
+                            <a href="tel:+41${memberPhoneLink}" class="block text-sm hover:text-white underline">${memberPhone}</a>
                         </div>
                     </div>
                 </div>
@@ -158,6 +194,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log(`Successfully created card for ${member.name}`);
         } catch (error) {
             console.error(`Error creating card for ${member.name}:`, error);
+            // Selbst wenn ein Fehler auftritt, wird die leere Karte zurückgegeben,
+            // um die Ausführung nicht zu blockieren, aber wir fügen einen Fehler-Fallback hinzu.
+            card.innerHTML = `<div class="team-static-info"><h4>Fehler</h4><p>Karte konnte nicht geladen werden.</p></div>`;
         }
         return card;
     }
@@ -191,14 +230,22 @@ document.addEventListener('DOMContentLoaded', async function() {
                     openModal(service);
                 });
             });
-            modalCloseBtn.addEventListener('click', closeModal);
-            modalOverlay.addEventListener('click', closeModal);
+            // Sicherstellen, dass die Elemente existieren, bevor Listener hinzugefügt werden
+            if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+            if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
         }
     }
 
     function initializeReferences(projects) {
         const projectListContainer = document.getElementById('project-list');
         if (!projectListContainer) return;
+        
+        // Sicherstellen, dass projects vorhanden und ein Array ist
+        if (!projects || !Array.isArray(projects)) {
+            console.error('Projects data is missing or not an array.');
+            projectListContainer.innerHTML = '<p class="text-white">Referenzliste konnte nicht geladen werden.</p>';
+            return;
+        }
 
         let autoScrollInterval = null;
 
@@ -208,7 +255,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             sortedProjects.forEach(project => {
                 const item = document.createElement('div');
                 item.className = 'project-list-item';
-                item.innerHTML = `<h4>${project.name}, ${project.location}</h4><p>${project.year} &ndash; ${project.service}</p>`;
+                // Fallback für fehlende Projektdaten
+                item.innerHTML = `<h4>${project.name || 'Projekt'}, ${project.location || 'Ort'}</h4><p>${project.year || 'N/A'} &ndash; ${project.service || 'Leistung'}</p>`;
                 projectListContainer.appendChild(item);
             });
         };
@@ -217,6 +265,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             stopAutoScroll();
             autoScrollInterval = setInterval(() => {
                 const container = projectListContainer;
+                // Sicherstellen, dass der Container noch existiert
+                if (!container) {
+                    stopAutoScroll();
+                    return;
+                }
                 if (container.scrollTop >= (container.scrollHeight - container.clientHeight)) {
                     container.scrollTop = 0;
                 } else {
@@ -247,14 +300,20 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     function setupSlideshow(containerSelector, imageArray, intervalDuration) {
-        if (!containerSelector || !imageArray) {
-            console.error('setupSlideshow: Missing required parameters');
+        if (!containerSelector) {
+            console.error('setupSlideshow: Missing containerSelector');
             return;
         }
 
         const container = document.querySelector(containerSelector);
-        if (!container || !Array.isArray(imageArray) || imageArray.length === 0) {
-            console.log(`Slideshow setup skipped for ${containerSelector}: No container or images.`);
+        if (!container) {
+            console.log(`Slideshow setup skipped for ${containerSelector}: Container not found.`);
+            return;
+        }
+        
+        if (!Array.isArray(imageArray) || imageArray.length === 0) {
+            console.log(`Slideshow setup skipped for ${containerSelector}: No images.`);
+            container.innerHTML = '<p style="color: white; padding: 1rem; text-align: center;">Bildergalerie konnte nicht geladen werden.</p>';
             return;
         }
 
@@ -262,6 +321,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         const transitionDuration = 1500;
 
         imageArray.forEach((img, index) => {
+            // Sicherstellen, dass img ein gültiges Objekt ist
+            if (!img || !img.basename) {
+                console.warn('Skipping invalid image in slideshow:', img);
+                return; // Überspringt dieses Bild
+            }
+
             const pictureElement = document.createElement('picture');
             const sourceAvif = document.createElement('source');
             const imgElement = document.createElement('img');
@@ -276,7 +341,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             // Final <img> fallback
             imgElement.src = `${basePath}.avif`;
-            imgElement.alt = img.alt;
+            imgElement.alt = img.alt || 'Slideshow-Bild'; // Fallback für Alt-Text
             imgElement.className = 'slide-image';
             imgElement.loading = 'lazy';
             
@@ -287,7 +352,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             slide.className = 'slide';
             slide.appendChild(pictureElement);
             slide.setAttribute('role', 'img');
-            slide.setAttribute('aria-label', img.alt);
+            slide.setAttribute('aria-label', img.alt || 'Slideshow-Bild');
             const animationIndex = (index % 8) + 1;
             slide.dataset.animationName = `kenburns-${animationIndex}`;
             container.appendChild(slide);
@@ -305,6 +370,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         let currentSlideIndex = 0;
         const playSlide = (slideIndex) => {
             const slide = slides[slideIndex];
+            if (!slide) return; // ZusätzlicheSicherheitsprüfung
             const animationDuration = (intervalDuration + transitionDuration) / 1000;
             slide.style.animation = `${slide.dataset.animationName} ${animationDuration}s linear 1 forwards`;
             slide.classList.add('active');
@@ -316,10 +382,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             const oldSlide = slides[currentSlideIndex];
             currentSlideIndex = (currentSlideIndex + 1) % slides.length;
             playSlide(currentSlideIndex);
-            oldSlide.classList.remove('active');
-            setTimeout(() => {
-                oldSlide.style.animation = '';
-            }, transitionDuration);
+            if (oldSlide) {
+                oldSlide.classList.remove('active');
+                setTimeout(() => {
+                    oldSlide.style.animation = '';
+                }, transitionDuration);
+            }
         };
 
         if (container.slideshowInterval) clearInterval(container.slideshowInterval);
@@ -347,4 +415,18 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Start initialization
     init();
+
+} catch (error) {
+    console.error('Ein schwerwiegender Fehler ist bei der Initialisierung aufgetreten:', error);
+    
+    // Sicherstellen, dass body existiert, bevor wir darauf zugreifen
+    if (document.body) {
+        document.body.innerHTML = '<div style="padding: 2rem; text-align: center; font-family: sans-serif; color: #333; opacity: 1;"><h1>Ein Fehler ist aufgetreten</h1><p>Die Seite konnte nicht korrekt geladen werden. Bitte versuchen Sie es später erneut.</p></div>';
+        // Erzwingt die Sichtbarkeit, falls das CSS 'opacity: 0' noch aktiv ist
+        document.body.style.opacity = '1'; 
+    } else {
+        // Fallback, wenn body aus irgendeinem Grund null ist (sollte nicht passieren mit defer/DOMContentLoaded)
+        console.error('document.body nicht gefunden beim Fehler-Handling.');
+    }
+}
 });
