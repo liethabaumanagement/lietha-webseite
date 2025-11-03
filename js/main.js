@@ -1,32 +1,14 @@
 // js/main.js
 // Importiert alle Daten-Module und steuert die Interaktivität der Seite.
 
-// Asynchronously import all data modules
-async function loadModules() {
-    try {
-        const [
-            { referenceProjects },
-            { heroImages },
-            { referenceImages },
-            { teamImages }
-        ] = await Promise.all([
-            import('./data/projects.js'),
-            import('./data/hero-images.js'),
-            import('./data/reference-images.js'),
-            import('./data/team-images.js')
-        ]);
-        return { referenceProjects, heroImages, referenceImages, teamImages };
-    } catch (error) {
-        console.error('Error loading modules:', error);
-        throw error;
-    }
-}
+// Daten aus separaten Modulen importieren
+import { referenceProjects } from './data/projects.js';
+import { heroImages } from './data/hero-images.js';
+import { referenceImages } from './data/reference-images.js';
+import { teamImages } from './data/team-images.js';
 
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', function() {
     'use strict';
-    
-    try {
-        const { referenceProjects, heroImages, referenceImages, teamImages } = await loadModules();
 
     // --- DATEN für Service Modal (bleibt hier, da klein und statisch) ---
     const serviceData = {
@@ -415,18 +397,4 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Start initialization
     init();
-
-} catch (error) {
-    console.error('Ein schwerwiegender Fehler ist bei der Initialisierung aufgetreten:', error);
-    
-    // Sicherstellen, dass body existiert, bevor wir darauf zugreifen
-    if (document.body) {
-        document.body.innerHTML = '<div style="padding: 2rem; text-align: center; font-family: sans-serif; color: #333; opacity: 1;"><h1>Ein Fehler ist aufgetreten</h1><p>Die Seite konnte nicht korrekt geladen werden. Bitte versuchen Sie es später erneut.</p></div>';
-        // Erzwingt die Sichtbarkeit, falls das CSS 'opacity: 0' noch aktiv ist
-        document.body.style.opacity = '1'; 
-    } else {
-        // Fallback, wenn body aus irgendeinem Grund null ist (sollte nicht passieren mit defer/DOMContentLoaded)
-        console.error('document.body nicht gefunden beim Fehler-Handling.');
-    }
-}
 });
