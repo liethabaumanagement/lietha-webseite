@@ -138,8 +138,17 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         teamContainer.appendChild(jobCard);
 
-        // Re-run scroll animations so observer picks up new cards
-        initializeScrollAnimations();
+        // Manually observe team cards with IntersectionObserver
+        const fadeInObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        // Observe all team cards (including job card)
+        document.querySelectorAll('.team-card').forEach(el => fadeInObserver.observe(el));
     }
 
     function createTeamCard(member, idx) {
