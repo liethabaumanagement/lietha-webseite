@@ -111,11 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`Creating card for team member: ${member.name}`);
             const card = createTeamCard(member, idx);
             teamContainer.appendChild(card);
-            
-            // Trigger fade-in animation after a short delay
-            setTimeout(() => {
-                card.classList.add('is-visible');
-            }, 100 + (idx * 100));
         });
 
         // Add the job card at the end
@@ -142,11 +137,9 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         teamContainer.appendChild(jobCard);
-        
-        // Trigger fade-in animation for job card
-        setTimeout(() => {
-            jobCard.classList.add('is-visible');
-        }, 100 + (teamImages.length * 100));
+
+        // Re-run scroll animations so observer picks up new cards
+        initializeScrollAnimations();
     }
 
     function createTeamCard(member, idx) {
