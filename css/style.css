@@ -309,6 +309,21 @@ body.modal-open {
     transform: scale(1.1); 
 }
 
+/* --- SKYLINE FOOTER DIVIDER --- */
+.skyline-divider {
+    width: 100%;
+    line-height: 0;
+    position: relative;
+    top: 0;
+}
+.skyline-divider svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    min-height: 40px;
+    max-height: 80px;
+}
+
 /* --- REFERENZEN SEKTION --- */
 #project-list {
     overflow-y: auto;
