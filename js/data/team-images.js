@@ -58,7 +58,7 @@ export const teamImages = [
     serious: { basename: 'mike-serious', alt: 'Mike Jäger' },
     smiling: { basename: 'mike-smiling', alt: 'Mike Jäger lachend' },
     email: 'mj@l-b-m.ch',
-    phone: '+41 81 252 46 46',
+    phone: '+41 79 900 75 72',
     fullName: 'Mike Jäger',
     job: 'Bauleiter'
   }
