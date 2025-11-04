@@ -30,7 +30,7 @@ export const referenceProjects = [
     { year: 2022, name: 'Sanierung EFH mit Einliegerwohnung', location: 'Thusis', service: 'Bau- und Projektleitung' },
     { year: 2022, name: 'Sanierung Ferienhaus', location: 'Lenzerheide', service: 'Bauleitung' },
     { year: 2022, name: 'Lifteinbau Obere Gasse', location: 'Chur', service: 'Bauleitung' },
-    { year: 2022, name: 'Umbau Ferienhaus', location: 'Briegels', service: 'Bauleitung' },
+    { year: 2022, name: 'Umbau Ferienhaus', location: 'Brigels', service: 'Bauleitung' },
     { year: 2022, name: 'Begleitung Mängelbehebung', location: 'Chur', service: 'Bauherrenberatung und Bauleitung' },
     { year: 2022, name: 'Büroumbau ARA', location: 'Chur', service: 'Bauleitung' },
     { year: 2022, name: 'Sanierung Wohnung', location: 'Chur', service: 'Planung, Bau- und Projektleitung' },
